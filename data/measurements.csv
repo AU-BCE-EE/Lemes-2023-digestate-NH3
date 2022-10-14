@@ -1,0 +1,20 @@
+Experiment,Treatment,Replicate,Cumulative emission g-N/m2,Application rate (g-N/m2),Emission (% of TAN)
+exper,treat,rep,e.cum,app.rate,e.rel
+Experiment 1,CC-CM,1,0.575800401221143,6.5,8.86
+Experiment 1,CC-CM,2,0.617539681462303,6.5,9.50
+Experiment 1,CC-CM,3,0.829387001975692,6.5,12.76
+Experiment 1,D-CM,1,1.72557527964606,13,13.27
+Experiment 1,D-CM,2,2.91930070414976,13,22.46
+Experiment 1,D-CM,3,2.15690852197843,13,16.59
+Experiment 1,U-CM,1,1.22591733073067,10,12.26
+Experiment 1,U-CM,2,1.90142965550042,10,19.01
+Experiment 1,U-CM,3,1.1606873559989,10,11.61
+Experiment 2,CC-CM,1,1.16643398734877,6.5,17.95
+Experiment 2,CC-CM,2,1.32197712272385,6.5,20.34
+Experiment 2,CC-CM,3,1.30931554736047,6.5,20.14
+Experiment 2,D-CM,1,2.98686451135364,13,22.98
+Experiment 2,D-CM,2,3.19186479012667,13,24.55
+Experiment 2,D-CM,3,2.7543896475468,13,21.19
+Experiment 2,U-CM,1,1.59316142118954,10,15.93
+Experiment 2,U-CM,2,2.10578861060189,10,21.06
+Experiment 2,U-CM,3,2.3445139087887,10,23.45

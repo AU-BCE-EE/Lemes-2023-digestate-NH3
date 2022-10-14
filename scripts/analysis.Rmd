@@ -1,0 +1,46 @@
+---
+title: 'Data analysis for digestate experiments'
+output: pdf_document
+author: Sasha D. Hafner
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+# Plots
+
+```{r}
+ggplot(dat, aes(exper, e.rel, colour = treat)) +
+  geom_jitter(height = 0)
+```
+
+```{r}
+ggplot(dat, aes(as.integer(factor(exper)), e.rel, colour = treat, group = interaction(treat, rep))) +
+  geom_point() +
+  geom_line()
+```
+
+```{r}
+ggplot(dat, aes(exper, e.rel, fill = treat)) +
+  geom_boxplot() +
+  ylim(0, 25)
+```
+
+# Stats
+
+```{r}
+m1 <- aov(e.rel ~ treat + exper, data = dat)
+summary(m1)
+summary.lm(m1)
+TukeyHSD(m1, 'treat')
+```
+
+Check residuals.
+
+```{r}
+plot(m1, ask = FALSE)
+```
+
+Looks fine, no need to transform.
+
+CC-CM and D-CM are clearly different.
+
+
