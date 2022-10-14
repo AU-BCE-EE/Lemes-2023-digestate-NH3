@@ -26,12 +26,23 @@ ggplot(dat, aes(exper, e.rel, fill = treat)) +
 
 # Stats
 
+Set reference to untreated cattle manure.
+
+```{r}
+dat$treat <- factor(dat$treat, levels = c('U-CM', 'CC-CM', 'D-CM'))
+```
+
 ```{r}
 m1 <- aov(e.rel ~ treat + exper, data = dat)
 summary(m1)
 summary.lm(m1)
 TukeyHSD(m1, 'treat')
 ```
+
+CC-CM and D-CM are clearly different.
+But neither is clearly different from the reference.
+Makes interpretation just a bit tricky.
+Some evidence of a difference but presumably digestion pH effect is moderated by low DM, and variability was high, so power is low.
 
 Check residuals.
 
@@ -41,6 +52,5 @@ plot(m1, ask = FALSE)
 
 Looks fine, no need to transform.
 
-CC-CM and D-CM are clearly different.
 
 
