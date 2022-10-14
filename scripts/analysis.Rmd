@@ -36,7 +36,6 @@ dat$treat <- factor(dat$treat, levels = c('U-CM', 'CC-CM', 'D-CM'))
 m1 <- aov(e.rel ~ treat + exper, data = dat)
 summary(m1)
 summary.lm(m1)
-TukeyHSD(m1, 'treat')
 ```
 
 CC-CM and D-CM are clearly different.
