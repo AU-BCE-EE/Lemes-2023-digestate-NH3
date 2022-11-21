@@ -2,6 +2,9 @@
 Ammonia loss from field-applied digestate measured by wind tunnel.
 This repo is for data analysis related to the manuscript.
 
+# Maintainer
+Yolanda Maria Lemes Perschke <https://pure.au.dk/portal/en/persons/yolanda-maria-lemes-perschke(fbcac929-5f57-4fcc-9d52-3cdc8cf05566).html>
+
 # Directory structure
 . . .
 
