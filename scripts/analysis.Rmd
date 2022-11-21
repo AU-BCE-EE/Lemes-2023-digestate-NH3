@@ -5,7 +5,7 @@ author: Sasha D. Hafner
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 ---
 
-# Plots
+# NH3 plots
 
 ```{r}
 ggplot(dat, aes(exper, e.rel, colour = treat)) +
@@ -24,7 +24,7 @@ ggplot(dat, aes(exper, e.rel, fill = treat)) +
   ylim(0, 25)
 ```
 
-# Stats
+# NH3 stats
 
 Set reference to untreated cattle manure.
 
@@ -50,6 +50,72 @@ plot(m1, ask = FALSE)
 ```
 
 Looks fine, no need to transform.
+
+# OAV plots
+
+```{r}
+ggplot(dat, aes(exper, oav, colour = treat)) +
+  geom_jitter(height = 0)
+```
+
+```{r}
+ggplot(dat, aes(as.integer(factor(exper)), oav, colour = treat, group = interaction(treat, rep))) +
+  geom_point() +
+  geom_line()
+```
+
+```{r}
+ggplot(dat, aes(exper, oav, fill = treat)) +
+  geom_boxplot() 
+```
+
+# OAV stats
+
+```{r}
+m1 <- aov(oav ~ treat + exper, data = dat)
+summary(m1)
+summary.lm(m1)
+```
+
+Check residuals.
+
+```{r}
+plot(m1, ask = FALSE)
+```
+
+# SOAV plots
+
+```{r}
+ggplot(dat, aes(exper, soav, colour = treat)) +
+  geom_jitter(height = 0)
+```
+
+```{r}
+ggplot(dat, aes(as.integer(factor(exper)), soav, colour = treat, group = interaction(treat, rep))) +
+  geom_point() +
+  geom_line()
+```
+
+```{r}
+ggplot(dat, aes(exper, soav, fill = treat)) +
+  geom_boxplot() 
+```
+
+# SOAV stats
+
+```{r}
+m1 <- aov(soav ~ treat + exper, data = dat)
+summary(m1)
+summary.lm(m1)
+```
+
+Check residuals.
+
+```{r}
+plot(m1, ask = FALSE)
+```
+
+
 
 
 
