@@ -30,12 +30,22 @@ Set reference to untreated cattle manure.
 
 ```{r}
 dat$treat <- factor(dat$treat, levels = c('U-CM', 'CC-CM', 'D-CM'))
+dat$exper <- factor(dat$exper)
 ```
 
 ```{r}
-m1 <- aov(e.rel ~ treat + exper, data = dat)
+m1 <- aov(e.rel ~ treat * exper, data = dat)
 summary(m1)
 summary.lm(m1)
+```
+
+No need to look at interaction.
+
+
+```{r}
+m2 <- aov(e.rel ~ treat + exper, data = dat)
+summary(m2)
+summary.lm(m2)
 ```
 
 CC-CM and D-CM are clearly different.
@@ -72,15 +82,54 @@ ggplot(dat, aes(exper, oav, fill = treat)) +
 # OAV stats
 
 ```{r}
-m1 <- aov(oav ~ treat + exper, data = dat)
+m1 <- aov(oav ~ treat * exper, data = dat)
 summary(m1)
 summary.lm(m1)
+confint(m1)
 ```
+
+For OAV there is a clear interaction.
+D-CM is no different from the reference in the first experiment, but is in the second.
+The apparent CC-CM reduction is also larger in experiment 2.
 
 Check residuals.
 
 ```{r}
 plot(m1, ask = FALSE)
+```
+
+No obviously improved with a transformation, but let's try log anyway to for fixed relative effects.
+
+```{r}
+m2 <- aov(log10(oav) ~ treat * exper, data = dat)
+summary(m2)
+summary.lm(m2)
+```
+
+Quite interesting.
+Interaction drops out.
+
+```{r}
+m3 <- aov(log10(oav) ~ treat + exper, data = dat)
+summary(m3)
+summary.lm(m3)
+confint(m3)
+```
+
+Look at back-transformed results.
+These are relative reductions in % of reference.
+
+```{r}
+100 * (1 - 10^coef(m3))
+100 * (1 - 10^confint(m3))
+```
+
+So we conclude CC-CM is lower, but D-CM difference isn't clear.
+
+Check residuals.
+
+```{r}
+plot(m3, ask = FALSE)
 ```
 
 # SOAV plots
@@ -104,15 +153,43 @@ ggplot(dat, aes(exper, soav, fill = treat)) +
 # SOAV stats
 
 ```{r}
-m1 <- aov(soav ~ treat + exper, data = dat)
+m1 <- aov(soav ~ treat * exper, data = dat)
 summary(m1)
 summary.lm(m1)
 ```
 
+Transform.
+
+```{r}
+m2 <- aov(log10(soav) ~ treat * exper, data = dat)
+summary(m2)
+summary.lm(m2)
+```
+
+We lose the interaction again.
+
+
+```{r}
+m3 <- aov(log10(soav) ~ treat + exper, data = dat)
+summary(m3)
+summary.lm(m3)
+confint(m3)
+```
+
+Look at back-transformed results.
+These are relative reductions in % of reference.
+
+```{r}
+100 * (1 - 10^coef(m3))
+100 * (1 - 10^confint(m3))
+```
+
+So we conclude both CC-CM and D-CM are lower.
+
 Check residuals.
 
 ```{r}
-plot(m1, ask = FALSE)
+plot(m3, ask = FALSE)
 ```
 
 
