@@ -41,16 +41,26 @@ summary.lm(m1)
 
 No need to look at interaction.
 
-
 ```{r}
 m2 <- aov(e.rel ~ treat + exper, data = dat)
 summary(m2)
 summary.lm(m2)
 ```
 
+```{r}
+m3 <- aov(log10(e.rel) ~ treat * exper, data = dat)
+summary(m3)
+```
+
+```{r}
+m4 <- aov(log10(e.rel) ~ treat + exper, data = dat)
+summary(m4)
+summary.lm(m4)
+```
+
 CC-CM and D-CM are clearly different.
 But neither is clearly different from the reference.
-Makes interpretation just a bit tricky.
+Makes interpretation just a bit tricky but not terrible.
 Some evidence of a difference but presumably digestion pH effect is moderated by low DM, and variability was high, so power is low.
 
 Check residuals.
