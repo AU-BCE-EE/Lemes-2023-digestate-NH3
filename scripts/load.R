@@ -1,3 +1,3 @@
 # Load data
 
-dat <- read.csv('../data/measurements.csv', skip = 1)
+dat <- read.csv('../data/NH3_measurements.csv', skip = 1)
