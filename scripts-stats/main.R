@@ -1,4 +1,4 @@
-# Analysis of wind tunnel measurements of NH3 loss from digestate etc.
+# Analysis of wind tunnel measurements of NH3 loss and odor from digestate etc.
 
 rm(list = ls())
 

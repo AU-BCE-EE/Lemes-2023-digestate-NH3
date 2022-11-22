@@ -5,7 +5,7 @@ author: Sasha D. Hafner
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 ---
 
-# Plots
+# NH3 plots
 
 ```{r}
 ggplot(dat, aes(exper, e.rel, colour = treat)) +
@@ -24,23 +24,43 @@ ggplot(dat, aes(exper, e.rel, fill = treat)) +
   ylim(0, 25)
 ```
 
-# Stats
+# NH3 stats
 
 Set reference to untreated cattle manure.
 
 ```{r}
 dat$treat <- factor(dat$treat, levels = c('U-CM', 'CC-CM', 'D-CM'))
+dat$exper <- factor(dat$exper)
 ```
 
 ```{r}
-m1 <- aov(e.rel ~ treat + exper, data = dat)
+m1 <- aov(e.rel ~ treat * exper, data = dat)
 summary(m1)
 summary.lm(m1)
 ```
 
+No need to look at interaction.
+
+```{r}
+m2 <- aov(e.rel ~ treat + exper, data = dat)
+summary(m2)
+summary.lm(m2)
+```
+
+```{r}
+m3 <- aov(log10(e.rel) ~ treat * exper, data = dat)
+summary(m3)
+```
+
+```{r}
+m4 <- aov(log10(e.rel) ~ treat + exper, data = dat)
+summary(m4)
+summary.lm(m4)
+```
+
 CC-CM and D-CM are clearly different.
 But neither is clearly different from the reference.
-Makes interpretation just a bit tricky.
+Makes interpretation just a bit tricky but not terrible.
 Some evidence of a difference but presumably digestion pH effect is moderated by low DM, and variability was high, so power is low.
 
 Check residuals.
@@ -50,6 +70,139 @@ plot(m1, ask = FALSE)
 ```
 
 Looks fine, no need to transform.
+
+# OAV plots
+
+```{r}
+ggplot(dat, aes(exper, oav, colour = treat)) +
+  geom_jitter(height = 0)
+```
+
+```{r}
+ggplot(dat, aes(as.integer(factor(exper)), oav, colour = treat, group = interaction(treat, rep))) +
+  geom_point() +
+  geom_line()
+```
+
+```{r}
+ggplot(dat, aes(exper, oav, fill = treat)) +
+  geom_boxplot() 
+```
+
+# OAV stats
+
+```{r}
+m1 <- aov(oav ~ treat * exper, data = dat)
+summary(m1)
+summary.lm(m1)
+confint(m1)
+```
+
+For OAV there is a clear interaction.
+D-CM is no different from the reference in the first experiment, but is in the second.
+The apparent CC-CM reduction is also larger in experiment 2.
+
+Check residuals.
+
+```{r}
+plot(m1, ask = FALSE)
+```
+
+No obviously improved with a transformation, but let's try log anyway to for fixed relative effects.
+
+```{r}
+m2 <- aov(log10(oav) ~ treat * exper, data = dat)
+summary(m2)
+summary.lm(m2)
+```
+
+Quite interesting.
+Interaction drops out.
+
+```{r}
+m3 <- aov(log10(oav) ~ treat + exper, data = dat)
+summary(m3)
+summary.lm(m3)
+confint(m3)
+```
+
+Look at back-transformed results.
+These are relative reductions in % of reference.
+
+```{r}
+100 * (1 - 10^coef(m3))
+100 * (1 - 10^confint(m3))
+```
+
+So we conclude CC-CM is lower, but D-CM difference isn't clear.
+
+Check residuals.
+
+```{r}
+plot(m3, ask = FALSE)
+```
+
+# SOAV plots
+
+```{r}
+ggplot(dat, aes(exper, soav, colour = treat)) +
+  geom_jitter(height = 0)
+```
+
+```{r}
+ggplot(dat, aes(as.integer(factor(exper)), soav, colour = treat, group = interaction(treat, rep))) +
+  geom_point() +
+  geom_line()
+```
+
+```{r}
+ggplot(dat, aes(exper, soav, fill = treat)) +
+  geom_boxplot() 
+```
+
+# SOAV stats
+
+```{r}
+m1 <- aov(soav ~ treat * exper, data = dat)
+summary(m1)
+summary.lm(m1)
+```
+
+Transform.
+
+```{r}
+m2 <- aov(log10(soav) ~ treat * exper, data = dat)
+summary(m2)
+summary.lm(m2)
+```
+
+We lose the interaction again.
+
+
+```{r}
+m3 <- aov(log10(soav) ~ treat + exper, data = dat)
+summary(m3)
+summary.lm(m3)
+confint(m3)
+```
+
+Look at back-transformed results.
+These are relative reductions in % of reference.
+
+```{r}
+100 * (1 - 10^coef(m3))
+100 * (1 - 10^confint(m3))
+```
+
+So we conclude both CC-CM and D-CM are lower.
+
+Check residuals.
+
+```{r}
+plot(m3, ask = FALSE)
+```
+
+
 
 
 
