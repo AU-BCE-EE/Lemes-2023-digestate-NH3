@@ -8,17 +8,6 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 # NH3 plots
 
 ```{r}
-ggplot(dat, aes(exper, e.rel, colour = treat)) +
-  geom_jitter(height = 0)
-```
-
-```{r}
-ggplot(dat, aes(as.integer(factor(exper)), e.rel, colour = treat, group = interaction(treat, rep))) +
-  geom_point() +
-  geom_line()
-```
-
-```{r}
 ggplot(dat, aes(exper, e.rel, fill = treat)) +
   geom_boxplot() +
   ylim(0, 25)
@@ -33,19 +22,24 @@ dat$treat <- factor(dat$treat, levels = c('U-CM', 'CC-CM', 'D-CM'))
 dat$exper <- factor(dat$exper)
 ```
 
+First model, with interaction, no transformation.
+
 ```{r}
 m1 <- aov(e.rel ~ treat * exper, data = dat)
 summary(m1)
 summary.lm(m1)
 ```
 
-No need to look at interaction.
+Without interaction.
 
 ```{r}
 m2 <- aov(e.rel ~ treat + exper, data = dat)
 summary(m2)
 summary.lm(m2)
 ```
+
+**This model is the one we should use in the paper.**
+Diagnostic plots look better, and the boxplot above shows smaller differences for experiment 2 (not larger as expected if there were a fixed relative effect).
 
 ```{r}
 m3 <- aov(log10(e.rel) ~ treat * exper, data = dat)
@@ -63,26 +57,21 @@ But neither is clearly different from the reference.
 Makes interpretation just a bit tricky but not terrible.
 Some evidence of a difference but presumably digestion pH effect is moderated by low DM, and variability was high, so power is low.
 
-Check residuals.
+Check diagnostic plots.
 
 ```{r}
 plot(m1, ask = FALSE)
 ```
 
-Looks fine, no need to transform.
+Diagnostic plots with transformation.
+
+```{r}
+plot(m4, ask = FALSE)
+```
+
+Actually looks better without the transformation.
 
 # OAV plots
-
-```{r}
-ggplot(dat, aes(exper, oav, colour = treat)) +
-  geom_jitter(height = 0)
-```
-
-```{r}
-ggplot(dat, aes(as.integer(factor(exper)), oav, colour = treat, group = interaction(treat, rep))) +
-  geom_point() +
-  geom_line()
-```
 
 ```{r}
 ggplot(dat, aes(exper, oav, fill = treat)) +
@@ -95,20 +84,7 @@ ggplot(dat, aes(exper, oav, fill = treat)) +
 m1 <- aov(oav ~ treat * exper, data = dat)
 summary(m1)
 summary.lm(m1)
-confint(m1)
 ```
-
-For OAV there is a clear interaction.
-D-CM is no different from the reference in the first experiment, but is in the second.
-The apparent CC-CM reduction is also larger in experiment 2.
-
-Check residuals.
-
-```{r}
-plot(m1, ask = FALSE)
-```
-
-No obviously improved with a transformation, but let's try log anyway to for fixed relative effects.
 
 ```{r}
 m2 <- aov(log10(oav) ~ treat * exper, data = dat)
@@ -126,6 +102,11 @@ summary.lm(m3)
 confint(m3)
 ```
 
+**This is the model we should use in the paper.**
+Most importantly (I think) the boxplot shows that a relative effects concept fits better than absolute effects.
+And diagnostic plots are better with the transformation.
+Lastly, the interaction drops out, which is simpler and so better by some perspectives.
+
 Look at back-transformed results.
 These are relative reductions in % of reference.
 
@@ -136,24 +117,19 @@ These are relative reductions in % of reference.
 
 So we conclude CC-CM is lower, but D-CM difference isn't clear.
 
-Check residuals.
+Check diagnostic plots.
+
+```{r}
+plot(m1, ask = FALSE)
+```
+
+Diagnostic plots with transformation.
 
 ```{r}
 plot(m3, ask = FALSE)
 ```
 
 # SOAV plots
-
-```{r}
-ggplot(dat, aes(exper, soav, colour = treat)) +
-  geom_jitter(height = 0)
-```
-
-```{r}
-ggplot(dat, aes(as.integer(factor(exper)), soav, colour = treat, group = interaction(treat, rep))) +
-  geom_point() +
-  geom_line()
-```
 
 ```{r}
 ggplot(dat, aes(exper, soav, fill = treat)) +
