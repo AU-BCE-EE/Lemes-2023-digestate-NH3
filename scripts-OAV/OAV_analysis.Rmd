@@ -1,0 +1,158 @@
+---
+title: 'Data analysis for odor from digestate experiments'
+output: pdf_document
+author: Sasha D. Hafner
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+# Plots
+
+```{r}
+ggplot(dat, aes(time, oav, colour = treat, group = interaction(rep, treat))) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~ exper)
+```
+
+```{r}
+ggplot(dat, aes(time, log10(oav), colour = treat, group = interaction(rep, treat))) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~ exper)
+```
+
+Looks linear enough.
+
+```{r}
+ggplot(dat, aes(time, log10(oav), colour = treat, group = interaction(rep, treat))) +
+  geom_line(alpha = 0.2) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) +
+  facet_wrap(~ exper)
+```
+
+# Stats
+
+So, our question will be (referring to last plot above) "are there differences in slope and initial value?".
+I had expected to use the intercept and slope terms in the analysis, but the least-squares lines don't fit very well in all cases at the start.
+And anyway, the initial measurements are our best estimate of initial OAV.
+
+Set reference to untreated cattle manure.
+
+```{r}
+dat$treat <- factor(dat$treat, levels = c('U-CM', 'CC-CM', 'D-CM'))
+dat$exper <- factor(dat$exper)
+```
+
+Unit of analysis will be wind tunnel plot.
+
+First fit linear model to each wind tunnel to get the slopes.
+
+```{r}
+lmods <- dat[, .(int = coef(lm(log10(oav) ~ time))[1], 
+                 slope = coef(lm(log10(oav) ~ time))[2]), 
+             by = .(exper, treat, rep)]
+```
+
+Take a look at slopes.
+
+```{r}
+ggplot(lmods, aes(exper, slope, fill = treat)) +
+  geom_boxplot()
+```
+
+Clear differences for D-CM in both experiments, but no difference for CC-CM in experiment 2.
+
+Now analysis.
+
+Look at slope.
+
+```{r}
+modslope1 <- lm(slope ~ treat * exper, data = lmods)
+summary.aov(modslope1)
+summary(modslope1)
+```
+
+Interactions complicated.
+Let's look by experiment.
+First experiment 1.
+
+```{r}
+modexp1 <- lm(slope ~ treat, data = lmods, subset = exper == 'Experiment 1')
+summary.aov(modexp1)
+summary(modexp1)
+```
+
+Both D-CM and CC-CM have lower slope than reference in experiment 1.
+**Use these results in paper.**
+
+Experiment 2 now
+
+```{r}
+modexp2 <- lm(slope ~ treat, data = lmods, subset = exper == 'Experiment 2')
+summary.aov(modexp2)
+summary(modexp2)
+```
+
+Here only D-CM is lower, and the effect seems larger than in experiment 1.
+**Use these results in paper.**
+
+Diagnostic plots.
+
+```{r}
+plot(modexp1, ask = FALSE)
+```
+
+```{r}
+plot(modexp2, ask = FALSE)
+```
+
+Not terrible.
+
+Now look at first measurement period in lieu of intercept.
+
+Add interval number to data.
+
+```{r}
+dat <- dat[, int := as.integer(factor(time)), by = exper]
+```
+
+And take a look at the initial OAV values.
+
+```{r}
+dd <- subset(dat, int == 1)
+ggplot(dd, aes(exper, oav, fill = treat)) +
+  geom_boxplot()
+```
+
+```{r}
+ggplot(dd, aes(exper, log10(oav), fill = treat)) +
+  geom_boxplot()
+```
+
+See CC-CM lower in both experiments, D-CM lower in experiment 2 only.
+
+```{r}
+modinit1 <- lm(log10(oav) ~ treat * exper, data = dat, subset = int == 1)
+summary.aov(modinit1)
+summary(modinit1)
+```
+
+Drop interaction.
+
+```{r}
+modinit2 <- lm(log10(oav) ~ treat + exper, data = dat, subset = int == 1)
+summary.aov(modinit2)
+summary(modinit2)
+```
+
+CC-CM clearly lower, D-CM not.
+**Use these results in paper.**
+
+Check diagnostic plots.
+
+```{r}
+plot(modinit2, ask = FALSE)
+```
+
+These look good.
