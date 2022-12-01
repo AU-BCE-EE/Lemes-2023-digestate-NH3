@@ -154,6 +154,8 @@ summary(modinit2)
 summary.lm(modinit2)
 100 * (1 - 10^coef(modinit2))
 100 * (1 - 10^confint(modinit2))
+100 * (10^coef(modinit2))
+100 * (10^confint(modinit2))
 ```
 
 **Use this model in paper.**
