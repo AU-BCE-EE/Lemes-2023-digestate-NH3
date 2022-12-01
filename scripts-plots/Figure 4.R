@@ -20,11 +20,11 @@ E2.all <- c((19.91 * time.exp2) / (time.exp2 + 1.3), (49.7 * time.exp2) / (time.
 
 df1 <- data.frame(time.exp1, E1.CC.CM, E1.D.CM, E1.U.CM)
 df1 <- data.frame(time.exp1, E1.all)
-df1$treatment <- c(rep('CC-CM', nrow(df1)/3), rep('D-CM', nrow(df1)/3), rep('U-CM', nrow(df1)/3))
+df1$treatment <- c(rep('D-CM-CC', nrow(df1)/3), rep('D-CM', nrow(df1)/3), rep('U-CM', nrow(df1)/3))
 
 df2 <- data.frame(time.exp2, E2.CC.CM, E2.D.CM, E2.U.CM)
 df2 <- data.frame(time.exp2, E2.all)
-df2$treatment <- c(rep('CC-CM', nrow(df2)/3), rep('D-CM', nrow(df2)/3), rep('U-CM', nrow(df2)/3))
+df2$treatment <- c(rep('D-CM-CC', nrow(df2)/3), rep('D-CM', nrow(df2)/3), rep('U-CM', nrow(df2)/3))
 
 names(df1) <- c('time', 'num', 'treatment')
 names(df2) <- c('time', 'num', 'treatment')
