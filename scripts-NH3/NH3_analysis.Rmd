@@ -1,0 +1,72 @@
+---
+title: 'Data analysis of cumulative NH3 for digestate experiments'
+output: pdf_document
+author: Sasha D. Hafner
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+# NH3 plots
+
+```{r}
+ggplot(dat, aes(exper, e.rel, fill = treat)) +
+  geom_boxplot() +
+  ylim(0, 25)
+```
+
+# NH3 stats
+
+Set reference to untreated cattle manure.
+
+```{r}
+dat$treat <- factor(dat$treat, levels = c('U-CM', 'CC-CM', 'D-CM'))
+dat$exper <- factor(dat$exper)
+```
+
+First model, with interaction, no transformation.
+
+```{r}
+m1 <- aov(e.rel ~ treat * exper, data = dat)
+summary(m1)
+summary.lm(m1)
+```
+
+Without interaction.
+
+```{r}
+m2 <- aov(e.rel ~ treat + exper, data = dat)
+summary(m2)
+summary.lm(m2)
+```
+
+**This model is the one we should use in the paper.**
+Diagnostic plots look better, and the boxplot above shows smaller differences for experiment 2 (not larger as expected if there were a fixed relative effect).
+
+```{r}
+m3 <- aov(log10(e.rel) ~ treat * exper, data = dat)
+summary(m3)
+```
+
+```{r}
+m4 <- aov(log10(e.rel) ~ treat + exper, data = dat)
+summary(m4)
+summary.lm(m4)
+```
+
+CC-CM and D-CM are clearly different.
+But neither is clearly different from the reference.
+Makes interpretation just a bit tricky but not terrible.
+Some evidence of a difference but presumably digestion pH effect is moderated by low DM, and variability was high, so power is low.
+
+Check diagnostic plots.
+
+```{r}
+plot(m1, ask = FALSE)
+```
+
+Diagnostic plots with transformation.
+
+```{r}
+plot(m4, ask = FALSE)
+```
+
+Actually looks better without the transformation.
