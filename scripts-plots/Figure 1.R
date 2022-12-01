@@ -1,3 +1,10 @@
+
+library(rmarkdown)
+library(ggplot2)
+library(openxlsx)
+library(plyr)
+
+
 rm(list = ls())
 
 dirname(rstudioapi::getActiveDocumentContext()$path)
@@ -6,6 +13,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 source('../scripts/packages.R')
 
 dat <- read.xlsx('../data/Figure 1 data.xlsx', fill = TRUE)
+
 
 dat.summ <- ddply(dat, c('experiment', 'treat', 'time'), summarise, flux.mn = mean(flux), flux.sd = sd(flux))
 
