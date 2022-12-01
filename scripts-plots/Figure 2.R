@@ -11,7 +11,7 @@ dat$treat <- as.factor(dat$treat)
 
 # adding application rate, g NH4-N m-2 (from Table 1)
 dat$app.rate <- dat$treat
-dat$app.rate <- mapvalues(dat$app.rate, from = 'CC-CM', to = 6.5)
+dat$app.rate <- mapvalues(dat$app.rate, from = 'D-CM-CC', to = 6.5)
 dat$app.rate <- mapvalues(dat$app.rate, from = 'D-CM', to = 13)
 dat$app.rate <- mapvalues(dat$app.rate, from = 'U-CM', to = 10)
 dat$app.rate <- as.numeric(as.character(dat$app.rate))
@@ -28,4 +28,4 @@ g <- ggplot(dat, aes(treat, loss.mn, fill = treat)) + geom_bar(stat = 'identity'
   ylab('Emission after 160 h [% of applied TAN]') +
   scale_fill_brewer(palette = "Set1")
 print(g)
-ggsave('../plots/Figure2.png', height = 4, width = 4)
+ggsave('../plots/Figure2_v2.png', height = 4, width = 4)
