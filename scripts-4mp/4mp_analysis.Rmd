@@ -18,27 +18,9 @@ ggplot(dat, aes(time.end, fmp, colour = treatment, group = interaction(tunnel, t
 
 Set reference to untreatmented cattle manure.
 
-```{r}
-dat$treatment <- factor(dat$treatment, levels = c('U-CM', 'D-CM', 'D-CM-CC'))
-dat$experiment <- factor(dat$experiment)
-```
-
 Unit of analysis will be wind tunnel plot.
 
 First fit model to each wind tunnel to get the ks.
-
-```{r}
-lmods <- dat[, .(mm = coef(nls(fmp ~ SSmicmen(time.end, mm, km)))[1], 
-                 km = coef(nls(fmp ~ SSmicmen(time.end, mm, km)))[2]), 
-             by = .(experiment, treatment, tunnel)]
-```
-
-Add calculated values to data frame.
-
-```{r}
-dat <- merge(dat, lmods, by = c('experiment', 'treatment', 'tunnel'))
-dat$fmp.calc <- dat$mm * dat$time.end / (dat$time.end + dat$km)
-```
 
 Look at fit.
 
