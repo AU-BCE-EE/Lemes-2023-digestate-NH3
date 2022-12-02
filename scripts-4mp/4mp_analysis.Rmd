@@ -1,0 +1,108 @@
+---
+title: 'Data analysis for 4-methyl phenol from digestate experiments'
+output: pdf_document
+author: Sasha D. Hafner
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+# Plots
+
+```{r}
+ggplot(dat, aes(time.end, fmp, colour = treatment, group = interaction(tunnel, treatment))) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~ experiment)
+```
+
+# Stats
+
+Set reference to untreatmented cattle manure.
+
+```{r}
+dat$treatment <- factor(dat$treatment, levels = c('U-CM', 'D-CM', 'D-CM-CC'))
+dat$experiment <- factor(dat$experiment)
+```
+
+Unit of analysis will be wind tunnel plot.
+
+First fit model to each wind tunnel to get the ks.
+
+```{r}
+lmods <- dat[, .(mm = coef(nls(fmp ~ SSmicmen(time.end, mm, km)))[1], 
+                 km = coef(nls(fmp ~ SSmicmen(time.end, mm, km)))[2]), 
+             by = .(experiment, treatment, tunnel)]
+```
+
+Add calculated values to data frame.
+
+```{r}
+dat <- merge(dat, lmods, by = c('experiment', 'treatment', 'tunnel'))
+dat$fmp.calc <- dat$mm * dat$time.end / (dat$time.end + dat$km)
+```
+
+Look at fit.
+
+```{r}
+ggplot(dat, aes(time.end, fmp, colour = treatment, group = interaction(tunnel, treatment))) +
+  geom_line() +
+  geom_point() +
+  geom_line(aes(time.end, fmp.calc), lty = '11') +
+  facet_wrap(~ experiment)
+```
+
+Take a look at km values.
+
+```{r}
+ggplot(lmods, aes(experiment, km, fill = treatment)) +
+  geom_boxplot()
+```
+
+Now analysis.
+
+```{r}
+modk1 <- lm(km ~ treatment * experiment, data = lmods)
+summary.aov(modk1)
+summary(modk1)
+```
+
+Interactions complicated.
+Let's look by experiment.
+First experiment 1.
+
+```{r}
+modexp1 <- aov(km ~ treatment, data = lmods, subset = experiment == 'Experiment 1')
+summary(modexp1)
+summary.lm(modexp1)
+coef(modexp1)
+confint(modexp1)
+model.tables(modexp1, type = 'means')
+```
+
+**Use this model in paper.**
+Both D-CM and CC-CM have lower k than reference in experiment 1.
+
+Experiment 2 next.
+
+```{r}
+modexp2 <- aov(km ~ treatment, data = lmods, subset = experiment == 'Experiment 2')
+summary(modexp2)
+summary.lm(modexp2)
+coef(modexp2)
+confint(modexp2)
+model.tables(modexp2, type = 'means')
+```
+
+Both D-CM and CC-CM have lower k than reference in experiment 2.
+**Use this model in paper for experiment 2.**
+
+Diagnostic plots.
+
+```{r}
+plot(modexp1, ask = FALSE)
+```
+
+```{r}
+plot(modexp2, ask = FALSE)
+```
+
+Not terrible.

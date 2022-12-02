@@ -1,0 +1,7 @@
+"treatment","experiment","mm.mean","km.mean","mm.sd","km.sd"
+"U-CM","Experiment 1",48.28,12.11,7.44,0.21
+"D-CM","Experiment 1",41.24,10.45,3.74,1.03
+"D-CM-CC","Experiment 1",14.29,6.57,1.72,0.32
+"U-CM","Experiment 2",86.02,4.49,15.06,0.66
+"D-CM","Experiment 2",52.97,3.49,5.81,0.21
+"D-CM-CC","Experiment 2",20.23,2.62,2.89,0.26
