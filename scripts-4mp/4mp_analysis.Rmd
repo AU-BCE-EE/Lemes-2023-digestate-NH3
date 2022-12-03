@@ -88,3 +88,13 @@ plot(modexp2, ask = FALSE)
 ```
 
 Not terrible.
+
+Now initial flux.
+
+```{r}
+modf1 <- aov(log10(fmp) ~ experiment * treatment, data = d1)
+summary(modf1)
+summary.lm(modf1)
+100 * (1 - 10^coef(modf1))
+100 * (1 - 10^confint(modf1))
+```

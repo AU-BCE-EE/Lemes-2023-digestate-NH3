@@ -8,3 +8,6 @@ dat$fmp <- dat$`4_`
 # Factors
 dat$treatment <- factor(dat$treatment, levels = c('U-CM', 'D-CM', 'D-CM-CC'))
 dat$experiment <- factor(dat$experiment)
+
+# Get initial values only for ANOVA
+d1 <- subset(dat, time == 0)
