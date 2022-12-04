@@ -10,6 +10,7 @@ ggplot(dat, aes(time.end, fmp, color = treatment, , group = interaction(tunnel, 
   facet_wrap(~ experiment, scales = 'free_x') + 
   theme_bw() + 
   theme(legend.title = element_blank(), legend.position = 'bottom') +
-  labs(y = expression('4-Methylphenol [mg'~m^'-2'*']'), x  = 'Time from slurry application [h]')
+  labs(y = expression('4-Methylphenol [mg'~m^'-2'*']'), x  = 'Time from slurry application [h]') + 
+  scale_color_brewer(palette = "Set1")
 
 ggsave('../plots/Figure4.png', height = 4, width = 7)

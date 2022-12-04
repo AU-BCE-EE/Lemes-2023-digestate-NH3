@@ -3,9 +3,14 @@ rm(list = ls())
 dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-source('../scripts/packages.R')
+source('packages.R')
 
 dat <- read.xlsx('../data/Figure 3 data.xlsx', fill = TRUE)
+
+dat$treatment <- mapvalues(dat$treatment, from = 'CC-CM', to = 'D-CM-CC')
+
+dat$treatment <- factor(dat$treatment, levels = c('U-CM', 'D-CM', 'D-CM-CC'))
+dat$experiment <- factor(dat$experiment)
 
 g <- ggplot(dat, aes(time, mean, color = treatment, fill = treatment)) + geom_point() + geom_line() +
   theme_bw() + 
