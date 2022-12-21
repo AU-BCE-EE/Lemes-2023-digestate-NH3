@@ -4,6 +4,7 @@ dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 source('packages.R')
+source('../functions/ggsave2x.R')
 
 dat <- read.xlsx('../data/Figure 1 data.xlsx', fill = TRUE)
 
@@ -33,6 +34,6 @@ g <- ggplot(dat.summ, aes(time, flux.mnB, color = treat, fill = treat)) + geom_p
   theme(legend.title = element_blank(), legend.position = 'bottom') +
   scale_color_brewer(palette = "Set1") + scale_fill_brewer(palette = 'Set1')
 print(g)
-ggsave('../plots/Figure1.png', height = 4, width = 7)
+ggsave2x('../plots/Figure1', height = 4, width = 7)
 
 

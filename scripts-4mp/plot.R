@@ -13,4 +13,4 @@ ggplot(dat, aes(time.end, fmp, color = treatment, , group = interaction(tunnel, 
   labs(y = expression('4-Methylphenol [mg'~m^'-2'*']'), x  = 'Time from slurry application [h]') + 
   scale_color_brewer(palette = "Set1")
 
-ggsave('../plots/Figure4.png', height = 4, width = 7)
+ggsave2x('../plots/Figure4', height = 4, width = 7)

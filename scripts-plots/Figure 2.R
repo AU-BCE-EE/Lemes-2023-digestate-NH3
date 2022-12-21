@@ -4,6 +4,7 @@ dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 source('packages.R')
+source('../functions/ggsave2x.R')
 
 dat <- read.xlsx('../data//Figure 2 data.xlsx', fill = TRUE)
 dat$experiment <- as.factor(dat$experiment)
@@ -33,4 +34,4 @@ g <- ggplot(dat, aes(treat, loss.mn, fill = treat)) + geom_bar(stat = 'identity'
   ylab('Emission after 160 h [% of applied TAN]') +
   scale_fill_brewer(palette = "Set1")
 print(g)
-ggsave('../plots/Figure2_v2.png', height = 4, width = 4)
+ggsave2x('../plots/Figure2_v2', height = 4, width = 4)
