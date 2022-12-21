@@ -4,6 +4,6 @@ library(ggplot2)
 library(openxlsx)
 library(data.table)
 
-sink('../logs/versions.txt')
+sink('../logs/R_versions_4mp.txt')
   print(sessionInfo())
 sink()
