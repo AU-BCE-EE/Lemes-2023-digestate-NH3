@@ -36,6 +36,22 @@ dat2$treat <- mapvalues(dat2$treat, from = 'CC-CM', to = 'D-CM-CC')
 dat2$treat <- factor(dat2$treat, levels = c('U-CM', 'D-CM', 'D-CM-CC'))
 dat2$experiment <- factor(dat2$experiment)
 
+# Figure 2 new version
+dat22$experiment <- as.factor(dat22$experiment)
+dat22$treat <- as.factor(dat22$treat)
+
+# adding application rate, g NH4-N m-2 (from Table 1)
+dat22$app.rate <- dat22$treat
+dat22$app.rate <- mapvalues(dat22$app.rate, from = 'D-CM-CC', to = 6.5)
+dat22$app.rate <- mapvalues(dat22$app.rate, from = 'D-CM', to = 13)
+dat22$app.rate <- mapvalues(dat22$app.rate, from = 'U-CM', to = 10)
+dat22$app.rate <- as.numeric(as.character(dat22$app.rate))
+
+dat22$loss <- (dat22$mean) / dat22$app.rate * 100 
+
+dat22$treat <- factor(dat22$treat, levels = c('U-CM', 'D-CM', 'D-CM-CC'))
+dat22$experiment <- factor(dat22$experiment)
+
 # Figure 3
 dat3$treatment <- mapvalues(dat3$treatment, from = 'CC-CM', to = 'D-CM-CC')
 

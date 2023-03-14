@@ -21,6 +21,24 @@ g <- ggplot(dat2, aes(treat, loss.mn, fill = treat)) + geom_bar(stat = 'identity
 print(g)
 ggsave2x('../plots/Figure2_v2', height = 4, width = 4)
 
+# Figure 2, version 2, points instead of barchart
+g <- ggplot(dat22, aes(treat, loss, color = treat)) + geom_point() +
+  theme_bw() +
+  facet_wrap(~ experiment) +
+  theme(axis.text.x = element_blank()) + theme(axis.ticks = element_blank()) + theme(axis.title.x = element_blank()) +
+  ylab('Emission after 160 h [% of applied TAN]') +
+  theme(legend.position = 'bottom') + theme(legend.title = element_blank()) +
+  scale_fill_brewer(palette = 'Set1') +
+  geom_segment(data = dat2, aes( x = as.numeric(as.factor(treat)) - 0.5,
+                                        xend = as.numeric(as.factor(treat)) + 0.5,
+                                        yend = loss.mn,
+                                        y = loss.mn,
+                                        color = treat)) +
+#  guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
+  ylim(0, NA)
+print(g)
+ggsave2x('../plots/Figure2_v3', height = 4, width = 4)
+
 # Figure 3
 g <- ggplot(dat3, aes(time, mean, color = treatment, fill = treatment)) + geom_point() + geom_line() +
   theme_bw() + 
