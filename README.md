@@ -4,7 +4,7 @@ This repo is for data analysis related to the manuscript.
 It contains data files, R scripts, and output.
 
 # Maintainer
-Yolanda Maria Lemes Perschke <https://pure.au.dk/portal/en/persons/yolanda-maria-lemes-perschke(fbcac929-5f57-4fcc-9d52-3cdc8cf05566).html>
+Yolanda Maria Lemes Perschke <https://au.dk/ymlp@bce.au.dk>
 
 # Directory structure
 
